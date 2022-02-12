@@ -1,0 +1,15 @@
+﻿@using part3.Models
+@model Item
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+
+    <p>@Model.name</p>
+    <p>@Model.price</p>
+    <img id="image_shown" src="@Url.Content(@Model.image_path)" style="height: 200px; width: auto" />
+
+    <button >View Product</button>
+
+</div>

@@ -1,0 +1,49 @@
+﻿@using part3.Models
+@model Computer_composit
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="display_items_block">
+   
+    
+        <div class="item_block">
+
+            <p>@Model.name</p>
+            <p>$ @Model.price</p>
+            <img class="item_block_image" id="image_shown" src="@Url.Content(Model.image_path)" />
+
+            @using (Html.BeginForm("ShowCompositeProduct", "Home", FormMethod.Post))
+            {
+                <input name="id" value="@Model.id" type="hidden" />
+                <button>View Product</button>
+            }
+
+        </div>
+
+    
+</div>
+
+
+
+@*
+    <div class="display_items_block">
+        @foreach (var item in Model)
+        {
+            <div class="item_block">
+
+                <p>@item.name</p>
+                <p>@item.price</p>
+                <img class="item_block_image" id="image_shown" src="@Url.Content(item.image_path)" />
+
+                @using (Html.BeginForm("ShowProduct", "Home", FormMethod.Post))
+                {
+                    <input name="id" value="@item.id" type="hidden" />
+                    <button>View Product</button>
+                }
+
+            </div>
+
+        }
+    </div>
+*@

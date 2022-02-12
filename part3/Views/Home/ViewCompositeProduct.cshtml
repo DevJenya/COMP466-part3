@@ -1,0 +1,43 @@
+﻿@model part3.Models.Computer_composit
+
+@{
+    ViewBag.Title = "ViewCompostiteProduct";
+}
+
+<h2>ViewCompostiteProduct</h2>
+
+<div>
+    <h4>Computer_composit</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.image_path)
+        </dt>
+
+        <dd>
+            <img id="image_shown2" src="@Url.Content(@Model.image_path)" style="height: 500px; width: auto" />
+        </dd>
+
+    </dl>
+    
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
