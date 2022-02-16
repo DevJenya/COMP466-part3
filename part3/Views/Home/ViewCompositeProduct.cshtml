@@ -1,49 +1,219 @@
-﻿@model part3.Models.Computer_composit
+﻿@using part3.Models
+
+@model Computer_composit
 
 @{
     ViewBag.Title = "ViewCompostiteProduct";
-    AjaxOptions ajaxOptions = new AjaxOptions
+
+    AjaxOptions ajaxOptionsCart = new AjaxOptions
     {
         HttpMethod = "POST",
         InsertionMode = InsertionMode.Replace,
-        UpdateTargetId = "image_block"
+        UpdateTargetId = "cartPartialView"
+    };
+
+    AjaxOptions ajaxOptionsRam = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "component_ram"
+    };
+
+    AjaxOptions ajaxOptionsHarddrive = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "component_harddrive"
+    };
+
+    AjaxOptions ajaxOptionsCpu = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "component_cpu"
+    };
+
+    AjaxOptions ajaxOptionsDisplay = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "component_display"
+    };
+
+    AjaxOptions ajaxOptionsOs = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "component_os"
+    };
+
+    AjaxOptions ajaxOptionsSoundCard = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "component_soundcard"
     };
 }
-
-<h2>ViewCompostiteProduct</h2>
-
-<div>
-    <h4>Computer_composit</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.price)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.price)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.image_path)
-        </dt>
-
-        <dd>
-            <img id="image_shown2" src="@Url.Content(@Model.image_path)" style="height: 500px; width: auto" />
-        </dd>
-
-    </dl>
-    
+<div class="shopping_cart_icon_container">
+    <a href="/Home/Cart" class="shopping_cart_icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </svg>
+    </a>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<div id="body_showComposite">
+
+    <div id="upper_showComposite">
+
+        <div id="computer_parts_information">
+
+            <h3>@Model.name</h3>
+
+            <img id="image_shown2" src="@Url.Content(@Model.image_path)" style="height: 350px; width: auto" />
+
+        </div>
+        <div id="computer_parts_selection">
+            @* Partial view for components of the pc pricing summary *@
+            <div id="cartPartialView">
+                @Html.Partial("_CartPartialView", Model)
+
+            </div>
+
+            <input type="button" name="btn_AddToCart" value="Add to cart" id="btn_addToCart" class="btn btn-primary" />
+        </div>
+
+    </div>
+    <div id="computer_parts_options">
+
+        <div>
+            <div class="change_component_outer_box">
+                @* Partial view for ram*@
+                <div id="component_ram" class="change_component_box">
+                    @Html.Partial("_ComponentDetails", Model.ram)
+
+                </div>
+                @using (Ajax.BeginForm("OnSelectItem", "Home", ajaxOptionsRam))
+                {
+                    @Html.DropDownList("IdSelected", ViewBag.ram_available as SelectList, new { @class = "dropdown_ram" });
+                    <input type="submit" value="Replace" class="btn_change_component" />
+                }
+            </div>
+
+            <div class="change_component_outer_box">
+                @* Partial view for hardrive*@
+                <div id="component_harddrive" class="change_component_box">
+                    @Html.Partial("_ComponentDetails", Model.harddrive)
+
+                </div>
+                @using (Ajax.BeginForm("OnSelectItem", "Home", ajaxOptionsHarddrive))
+                {
+                    @Html.DropDownList("IdSelected", ViewBag.harddrive_available as SelectList, new { @class = "dropdown_harddrive" });
+                    <input type="submit" value="Replace" class="btn_change_component" />
+                }
+            </div>
+        </div>
+
+        <div>
+            <div class="change_component_outer_box">
+                @* Partial view for cpu*@
+                <div id="component_cpu" class="change_component_box">
+                    @Html.Partial("_ComponentDetails", Model.cpu)
+
+                </div>
+                @using (Ajax.BeginForm("OnSelectItem", "Home", ajaxOptionsCpu))
+                {
+                    @Html.DropDownList("IdSelected", ViewBag.cpu_available as SelectList, new { @class = "dropdown_cpu" });
+                    <input type="submit" value="Replace" class="btn_change_component" />
+                }
+            </div>
+            <div class="change_component_outer_box">
+                @* Partial view for display*@
+                <div id="component_display" class="change_component_box">
+                    @Html.Partial("_ComponentDetails", Model.display)
+
+                </div>
+                @using (Ajax.BeginForm("OnSelectItem", "Home", ajaxOptionsDisplay))
+                {
+                    @Html.DropDownList("IdSelected", ViewBag.display_available as SelectList, new { @class = "dropdown_display" });
+                    <input type="submit" value="Replace" class="btn_change_component" />
+                }
+            </div>
+        </div>
+        <div>
+            <div class="change_component_outer_box">
+                @* Partial view for OS*@
+                <div id="component_os" class="change_component_box">
+                    @Html.Partial("_ComponentDetails", Model.os)
+
+                </div>
+                @using (Ajax.BeginForm("OnSelectItem", "Home", ajaxOptionsOs))
+                {
+                    @Html.DropDownList("IdSelected", ViewBag.os_available as SelectList, new { @class = "dropdown_os" });
+                    <input type="submit" value="Replace" class="btn_change_component" />
+                }
+            </div>
+            <div class="change_component_outer_box">
+                @* Partial view for sound card*@
+                <div id="component_soundcard" class="change_component_box">
+                    @Html.Partial("_ComponentDetails", Model.soundcard)
+
+                </div>
+                @using (Ajax.BeginForm("OnSelectItem", "Home", ajaxOptionsSoundCard))
+                {
+                    @Html.DropDownList("IdSelected", ViewBag.soundcard_available as SelectList, new { @class = "dropdown_soundcard" });
+                    <input type="submit" value="Replace" class="btn_change_component " />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        // this one button will update all your partials/widgets, you can add more partials in this function and just copy paste.
+        $(".btn_change_component").click(function () {
+            $.ajax({
+                url: "@Url.Action("UpdateCart")",    // whom to call
+                type: "POST",
+                data: {
+                    idComputer: $("#computer_userbuilt_id").val(),
+                    nameComputer: $("#computer_userbuilt_name").val(),
+                    priceComputer: $("#computer_userbuilt_price").val(),
+                    IdSelectedRam: $(".dropdown_ram").val(),
+                    IdSelectedHarddrive: $(".dropdown_harddrive").val(),
+                    IdSelectedCpu: $(".dropdown_cpu").val(),
+                    IdSelectedDisplay: $(".dropdown_display").val(),
+                    IdSelectedOs: $(".dropdown_os").val(),
+                    IdSelectedSoundcard: $(".dropdown_soundcard").val()
+                },
+                success: function (data) {
+                    $("#cartPartialView").html(data);  // tell it which div to append on return
+                }
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+        // this one button will update all your partials/widgets, you can add more partials in this function and just copy paste.
+        $("#btn_addToCart").click(function () {
+            $.ajax({
+                url: "@Url.Action("AddToCartComputer")",    // whom to call
+                type: "POST",
+                data: {
+                    idComputer: $("#computer_userbuilt_id").val(),
+                    nameComputer: $("#computer_userbuilt_name").val(),
+                    priceComputer: $("#computer_userbuilt_price").val(),
+                    idRam: $("#computer_userbuilt_ram").val(),
+                    idHarddrive: $("#computer_userbuilt_harddrive").val(),
+                    idCpu: $("#computer_userbuilt_cpu").val(),
+                    idDisplay: $("#computer_userbuilt_display").val(),
+                    idOs: $("#computer_userbuilt_os").val(),
+                    idSoundcard: $("#computer_userbuilt_soundcard").val()
+                },
+                success: function (data) {
+                }
+            });
+        });
+    </script>
+}

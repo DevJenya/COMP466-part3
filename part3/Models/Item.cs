@@ -12,6 +12,8 @@ namespace part3.Models
         public string name { get; set; }
         public double price { get; set; }
         public string image_path { get; set; }
+        public string get_name_price { get; set; }
+
 
         public Item(int id, int category, string name, double price, string image_path)
         {
@@ -20,8 +22,11 @@ namespace part3.Models
             this.name = name;
             this.price = price;
             this.image_path = image_path;
+            this.get_name_price = name + " - $" + price; 
         }
 
         public Item() { }
+
+        
     }
 }

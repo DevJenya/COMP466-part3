@@ -24,11 +24,26 @@ textarea {
 }
 
 .item_block{
-    display: block;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid black;
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+    background-color: white;
+}
+
+.composite_item_block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
     border: 1px solid black;
     margin: 10px;
     width: 300px;
+    height: 300px;
     background-color: white;
 }
 
@@ -39,12 +54,93 @@ textarea {
     width: 100%;
     height: 100%;
     background-color: lightgrey;
+    display: flex;
+    justify-content: center;
 }
 
 .item_block_image {
-    width: 90%;
+    width: 100px;
+    height: 100px;
 }
 
-body{
-   
+#computer_block_image {
+    width: 55%;
+}
+
+#cartPartialView {
+    padding: 15px;
+    border: 1px solid black;
+    width: 100%;
+    margin: 5px;
+}
+
+.container {
+    width: 100%;
+}
+
+#computer_parts_selection {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    min-width: 300px;
+
+}
+
+#computer_parts_information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    text-align: center;
+}
+
+#body_showComposite {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#computer_parts_options{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: #eee;
+}
+
+#upper_showComposite{
+    display: flex;
+    align-content:baseline;
+    justify-content:center;
+}
+
+.shopping_cart_icon_container {
+    width: 100%;
+    height: 55px;
+
+    display: flex;
+    justify-content: end;
+    align-items:center;
+}
+
+.shopping_cart_icon {
+    width: 50px;
+    height: 50px;
+    margin: 5px 5px;
+    padding:5px;
+    background: lightblue;
+}
+
+.change_component_box{
+    border: 1px solid black;
+    display: flex;
+    flex-direction:column;
+    justify-content:end;
+    width: 300px;
+    padding: 30px;
+
+}
+
+.change_component_outer_box {
+margin: 25px;
 }

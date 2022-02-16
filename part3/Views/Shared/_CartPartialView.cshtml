@@ -1,0 +1,45 @@
+﻿@using part3.Models
+
+@model Computer_composit
+
+@{
+    double ram_price = Model.ram.price;
+    double harddrive_price = Model.harddrive.price;
+    double cpu_price = Model.cpu.price;
+    double display_price = Model.display.price;
+    double os_price = Model.os.price;
+    double soundcard_price = Model.soundcard.price;
+
+    double total_price = ram_price + harddrive_price + cpu_price + display_price + os_price + soundcard_price;
+
+}
+
+
+<h3>Internal component</h3>
+
+
+<p>@Model.ram.name - $@ram_price</p>
+
+<p>@Model.harddrive.name - $@harddrive_price</p>
+
+<p>@Model.cpu.name - $@cpu_price</p>
+
+<p>@Model.display.name - $@display_price</p>
+
+<p>@Model.os.name - $@os_price</p>
+
+<p>@Model.soundcard.name - $@soundcard_price</p>
+
+<p>Total - $@total_price</p>
+
+@*Save value to be put into cart*@
+<input name="idComputer" value="@Model.id" type="hidden" id="computer_userbuilt_id" />
+<input name="nameComputer" value="@Model.name" type="hidden" id="computer_userbuilt_name" />
+<input name="priceComputer" value="@total_price" type="hidden" id="computer_userbuilt_price" />
+<input name="idRam" value="@Model.ram.id" type="hidden" id="computer_userbuilt_ram" />
+<input name="idHarddrive" value="@Model.harddrive.id" type="hidden" id="computer_userbuilt_harddrive" />
+<input name="idCpu" value="@Model.cpu.id" type="hidden" id="computer_userbuilt_cpu" />
+<input name="idDisplay" value="@Model.display.id" type="hidden" id="computer_userbuilt_display" />
+<input name="idOs" value="@Model.os.id" type="hidden" id="computer_userbuilt_os" />
+<input name="idSoundcard" value="@Model.soundcard.id" type="hidden" id="computer_userbuilt_soundcard" />
+

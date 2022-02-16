@@ -1,0 +1,58 @@
+﻿@using part3.Models
+
+@model List<Item>
+
+@{
+    ViewBag.Title = "ItemsList";
+}
+
+<h2>View Items</h2>
+<br />
+
+<table class="table">
+
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.price)
+        </td>
+        <td>
+            <img id="image_shown" src="@Url.Content(item.image_path)" style="height: 100px; width: auto" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.get_name_price)
+        </td>
+        @* <td>
+            <input name="id" value="@item.id" type="hidden" class="id_item_add_to_cart"/>
+            <input type="button" name="btn_AddToCart" value="Add to cart" class="btn_addToCart btn btn-primary" />
+        </td>*@
+    </tr>
+    }
+
+</table>
+
+@section scripts{
+
+    <script type="text/javascript">
+        // this one button will update all your partials/widgets, you can add more partials in this function and just copy paste.
+        $(".btn_addToCart").click(function () {
+            console.log("Pressed");
+            console.log($(this).siblings(".id_item_add_to_cart").val());
+            $.ajax({
+                url: "@Url.Action("AddToCart")",    // whom to call
+                type: "POST",
+                data: {
+                    itemID: $(this).siblings(".id_item_add_to_cart").val(),
+                },
+                success: function (data) {
+                    alert("Success");  // tell it which div to append on return
+                }
+            });
+        });
+    </script>
+}
