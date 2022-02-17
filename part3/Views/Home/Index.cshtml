@@ -2,10 +2,32 @@
 @model List<Computer_composit>
 @{
     ViewBag.Title = "Home Page";
+
+    string user_authorized = "";
+    if (Request.Cookies["authorized"] != null)
+    {
+        user_authorized = Request.Cookies["authorized"].Value;
+    } 
 }
+
+<br />
+<div class='auth_window' id="login_window">
+    <form action="/Login/Login" method="post" id="form_login">
+        <input type="text" name="username" id="login_user_name" placeholder="username">
+        <input type="password" name="password" id="login_pass" placeholder="password">
+        <button class="btn_submit" id="btn_login_submit" type="submit" name="form1">Login</button>
+
+        <a href="#">Sign up here</a>
+    </form>
+    <h3 id="welcome_user"></h3>
+    <form action="/Login/Logout" method="post" id="form_logout">
+        <button class="btn_submit" id="btn_login_submit" type="submit" name="form1">Logout</button>
+    </form>
+</div>
+
 <div class="shopping_cart_icon_container">
-    <a href="/Home/Cart" class="shopping_cart_icon"> 
-        <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+    <a href="/Home/Cart" class="shopping_cart_icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
         </svg>
     </a>
@@ -13,128 +35,96 @@
 
 <h3>Customizable Computers</h3>
 <div class="display_items_block">
-    
+
 
     @{int i = 0; }
     @foreach (var item in Model)
     {
-    <div class="composite_item_block">
+        <div class="composite_item_block">
 
-        <h3>@item.name</h3>
-        <h4>$@item.price</h4>
+            <h3>@item.name</h3>
+            <h4>$@item.price</h4>
 
-        <img id="computer_block_image" src="@Url.Content(item.image_path)"  />
+            <img id="computer_block_image" src="@Url.Content(item.image_path)" />
 
-        @using (Html.BeginForm("ShowCompositeProduct", "Home", FormMethod.Post))
-        { 
-            <input name="i" value="@i" type="hidden" /> 
-            <button class="btn btn-primary">View Product</button>
-        }
-    </div>
-       i++;
+            @using (Html.BeginForm("ShowCompositeProduct", "Home", FormMethod.Post))
+            {
+                <input name="i" value="@i" type="hidden" />
+                <button class="btn btn-primary">View Product</button>
+            }
+        </div>
+        i++;
     }
 </div>
 <br />
 <h3>Explore Available Parts</h3>
-    <div class="display_items_block">
+<div class="display_items_block">
 
-        <div class="item_block">
+    <div class="item_block">
 
-            <p>RAM</p>
-            <a href="/Home/ItemsList?category=1">
-                <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
-            </a>
-            <a class="btn btn-primary" href="/Home/ItemsList?category=1">View ALL</a>
-        </div>
-
-        <div class="item_block">
-
-            <p>HARD DRIVES</p>
-            <a href="/Home/ItemsList?category=2">
-                <img class="item_block_image" id="image_shown" src="~/images/harddrive.jpg" />
-            </a>
-            <a class="btn btn-primary" href="/Home/ItemsList?category=2">View ALL</a>
-        </div>
-
-        <div class="item_block">
-
-            <p>CPUs</p>
-            <a href="/Home/ItemsList?category=3">
-                <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
-            </a>
-            <a class="btn btn-primary" href="/Home/ItemsList?category=3">View ALL</a>
-        </div>
-
-        <div class="item_block">
-
-            <p>Displays</p>
-            <a href="/Home/ItemsList?category=4">
-                <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
-            </a>
-            <a class="btn btn-primary" href="/Home/ItemsList?category=4">View ALL</a>
-        </div>
-
-        <div class="item_block">
-
-            <p>Operating Systems</p>
-            <a href="/Home/ItemsList?category=3">
-                <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
-            </a>
-            <a class="btn btn-primary" href="/Home/ItemsList?category=3">View ALL</a>
-        </div>
-
-        <div class="item_block">
-
-            <p>Sound Cards</p>
-            <a href="/Home/ItemsList?category=4">
-                <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
-            </a>
-            <a class="btn btn-primary" href="/Home/ItemsList?category=4">View ALL</a>
-        </div>
+        <p>RAM</p>
+        <a href="/Home/ItemsList?category=1">
+            <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
+        </a>
+        <a class="btn btn-primary" href="/Home/ItemsList?category=1">View ALL</a>
     </div>
 
+    <div class="item_block">
 
-    @*
-        <div class="display_items_block">
+        <p>HARD DRIVES</p>
+        <a href="/Home/ItemsList?category=2">
+            <img class="item_block_image" id="image_shown" src="~/images/harddrive.jpg" />
+        </a>
+        <a class="btn btn-primary" href="/Home/ItemsList?category=2">View ALL</a>
+    </div>
+
+    <div class="item_block">
+
+        <p>CPUs</p>
+        <a href="/Home/ItemsList?category=3">
+            <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
+        </a>
+        <a class="btn btn-primary" href="/Home/ItemsList?category=3">View ALL</a>
+    </div>
+
+    <div class="item_block">
+
+        <p>Displays</p>
+        <a href="/Home/ItemsList?category=4">
+            <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
+        </a>
+        <a class="btn btn-primary" href="/Home/ItemsList?category=4">View ALL</a>
+    </div>
+
+    <div class="item_block">
+
+        <p>Operating Systems</p>
+        <a href="/Home/ItemsList?category=3">
+            <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
+        </a>
+        <a class="btn btn-primary" href="/Home/ItemsList?category=3">View ALL</a>
+    </div>
+
+    <div class="item_block">
+
+        <p>Sound Cards</p>
+        <a href="/Home/ItemsList?category=4">
+            <img class="item_block_image" id="image_shown" src="~/images/ram.jpg" />
+        </a>
+        <a class="btn btn-primary" href="/Home/ItemsList?category=4">View ALL</a>
+    </div>
+</div>
 
 
-        <div class="item_block">
+@section Scripts {
 
-            <p>@Model.Item2.name</p>
-            <p>$ @Model.Item2.price</p>
-            <img class="item_block_image" id="image_shown" src="@Url.Content(Model.Item2.image_path)" />
-
-            @using (Html.BeginForm("ShowProduct", "Home", FormMethod.Post))
-            {
-                <input name="id" value="@Model.Item2.id" type="hidden" />
-                <button>View Product</button>
+    <script>
+        $(window).ready(function () {
+            if ("@user_authorized" != "") {
+                $("#welcome_user").html("Welcome, @user_authorized");
+                $("#form_login").hide();
             }
+            });
 
-        </div>
-
-
-
-
-
-
-
-        <div class="display_items_block">
-            @foreach (var item in Model)
-            {
-                <div class="item_block">
-
-                    <p>@item.name</p>
-                    <p>@item.price</p>
-                    <img class="item_block_image" id="image_shown" src="@Url.Content(item.image_path)" />
-
-                    @using (Html.BeginForm("ShowProduct", "Home", FormMethod.Post))
-                    {
-                        <input name="id" value="@item.id" type="hidden" />
-                        <button>View Product</button>
-                    }
-
-                </div>
-
-            }
-        </div>
-    *@
+    </script>
+}

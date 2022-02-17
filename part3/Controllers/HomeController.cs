@@ -78,9 +78,8 @@ namespace part3.Controllers
         }
 
         public ActionResult Index()
-        {
-          
-            return View(computer_list);
+        {        
+           return View(computer_list);
         }
 
 
