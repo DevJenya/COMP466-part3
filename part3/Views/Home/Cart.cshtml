@@ -6,7 +6,9 @@
 }
 
 <h2>Cart</h2>
-
+<form action="/" method="post">
+    <button>ORDER AND PAY</button>
+</form>
 
 <br />
 
@@ -31,52 +33,12 @@
         </tr>
     }
 
-    @foreach (var item in Model.Item2)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                <img id="image_shown" src="@Url.Content(item.image_path)" style="height: 100px; width: auto" />
-            </td>
 
-            <td>
-                <input name="id" value="@item.id" type="hidden" class="id_item_remove_from_cart" />
-                <input type="button" name="btn_RemoveFromCart" value="Remove" class="btn_RemoveFromCart btn btn-primary" />
-            </td>
-        </tr>
-    }
 </table>
 
 @section scripts{
 
     <script type="text/javascript">
-        //RemoveComputerFromCart
-        // this one button will update all your partials/widgets, you can add more partials in this function and just copy paste.
-        $(".btn_RemoveFromCart").click(function () {
-            console.log("Pressed");
-            console.log($(this).siblings(".id_item_remove_from_cart").val());
-            var obj = this;
-            $.ajax({
-                url: "@Url.Action("RemoveFromCart")",    // whom to call
-                type: "POST",
-                data: {
-                    itemID: $(this).siblings(".id_item_remove_from_cart").val(),
-                },
-                success: function (data) {
-                    alert(data);  // tell it which div to append on return
-
-                    if (data == 1) {
-                        alert("Success")
-                        console.log(obj.parentElement.parentElement.remove());
-                    }
-                }
-            });
-        });
 
         $(".btn_RemoveComputerFromCart").click(function () {
             console.log("Pressed Computer remove");
@@ -94,7 +56,6 @@
                     if (data == 1) {
                         var parent_container = obj.parentElement.parentElement;
                         $(parent_container).fadeOut(1000);
-                        //console.log(obj.parentElement.parentElement.remove());
                     }
                 }
             });

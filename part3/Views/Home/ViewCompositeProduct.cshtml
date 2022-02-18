@@ -181,7 +181,7 @@
         // this one button will update all your partials/widgets, you can add more partials in this function and just copy paste.
         $(".btn_change_component").click(function () {            
             $.ajax({
-                url: "@Url.Action("UpdateCart")",    // whom to call
+                url: "@Url.Action("UpdateComputerComponents")",    // whom to call
                 type: "POST",
                 data: {
                     idComputer: $("#computer_userbuilt_id").val(),

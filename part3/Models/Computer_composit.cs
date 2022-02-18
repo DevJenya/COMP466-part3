@@ -9,7 +9,6 @@ namespace part3.Models
     {
         public int id { get; set; }
         public string name { get; set; } 
-
         public double price { get; set; }
         public Item ram { get; set; }
         public Item harddrive { get; set; }
@@ -19,7 +18,7 @@ namespace part3.Models
         public Item soundcard { get; set; }
         public string image_path { get; set; }
 
-        public Computer_composit(int id, string name, double price, Item ram, Item harddrive, Item cpu, Item display, Item os, Item soundcard, string image_path)
+        public Computer_composit(int id, string name, Item ram, Item harddrive, Item cpu, Item display, Item os, Item soundcard, string image_path)
         {
             this.id = id;
             this.name = name;

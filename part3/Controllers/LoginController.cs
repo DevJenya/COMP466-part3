@@ -15,6 +15,14 @@ namespace part3.Controllers
         {
             return View("Login");
         }
+
+        public ActionResult SubmitOrder()
+        {
+
+
+            return View("Login");
+        }
+
         public ActionResult RecoverPassword()
         {
             return View("RecoverPassword");

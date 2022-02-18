@@ -37,5 +37,20 @@ namespace part3.Services
         {
                 return daoService.RecoverPassword(user);
         }
+
+        public List<Item> GetItems()
+        {
+            return daoService.QueryItemsAvailable();
+        }
+
+        public List<Item> GetItemsByCategory(int category)
+        {
+            return daoService.QueryItemsByCategory(category);
+        }
+
+        public List<Computer_composit> GetComputers()
+        {
+            return daoService.QueryComputersAvailable();
+        }
     }
 }

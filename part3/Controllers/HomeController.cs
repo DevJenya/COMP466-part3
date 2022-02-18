@@ -1,4 +1,5 @@
 ﻿using part3.Models;
+using part3.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,64 +18,25 @@ namespace part3.Controllers
         List<Item> list_soundcard = new List<Item>();
 
         List<Item> store_items = new List<Item>();
-
-        Tuple<List<Item>, Computer_composit> PC_and_ram;
         List<Computer_composit> computer_list;
-
-        Item ram = new Item(0, 1, "Ram 1", 111.99, "~/images/ram.jpg");
-        Item harddrive = new Item(1, 2, "harddrive 1", 511.99, "~/images/harddrive.jpg");
-        Item cpu = new Item(2, 3, "Intel CPU", 671.99, "~/images/ram.jpg");
-        Item display = new Item(3, 4, "display", 511.99, "~/images/ram.jpg");
-        Item os = new Item(4, 5, "Operating System", 511.99, "~/images/ram.jpg");
-        Item soundcard = new Item(5, 6, "soundcard 11", 131.39, "~/images/ram.jpg");
-        Item ram2 = new Item(6, 1, "Ram 2 Big RAM", 221.99, "~/images/ram.jpg");
-        Item harddrive2 = new Item(7, 2, "MEGA harddrive 2 ", 211.99, "~/images/harddrive.jpg");
-        Item cpu2 = new Item(8, 3, "AMD CPU", 431.99, "~/images/ram.jpg");
-        Item display2 = new Item(9, 4, "display 2", 511.99, "~/images/ram.jpg");
-        Item os2 = new Item(10, 5, "Operating System 2", 511.99, "~/images/ram.jpg");
-        Item soundcard2 = new Item(11, 6, "soundcard 222", 777.99, "~/images/ram.jpg");
-
-        Computer_composit computer;
-        Computer_composit computer2;
-        Computer_composit computer3;
 
         public HomeController()
         {           
-            list_ram.Add(ram);
-            list_harddrive.Add(harddrive);
-            list_cpu.Add(cpu);
-            list_display.Add(display);
-            list_os.Add(os);
-            list_soundcard.Add(soundcard);
-            list_ram.Add(ram2);
-            list_harddrive.Add(harddrive2);
-            list_cpu.Add(cpu2);
-            list_display.Add(display2);
-            list_os.Add(os2);
-            list_soundcard.Add(soundcard2);
+            SecurityService securityService = new SecurityService();
 
-            store_items.Add(ram);
-            store_items.Add(harddrive);
-            store_items.Add(cpu);
-            store_items.Add(display);
-            store_items.Add(os);
-            store_items.Add(soundcard);
-            store_items.Add(ram2);
-            store_items.Add(harddrive2);
-            store_items.Add(cpu2);
-            store_items.Add(display2);
-            store_items.Add(os2);
-            store_items.Add(soundcard2);   
+            store_items = securityService.GetItems();
+            list_ram = securityService.GetItemsByCategory(1);
+            list_harddrive = securityService.GetItemsByCategory(2);
+            list_cpu = securityService.GetItemsByCategory(3);
+            list_display = securityService.GetItemsByCategory(4);
+            list_os = securityService.GetItemsByCategory(5);
+            list_soundcard = securityService.GetItemsByCategory(6);
 
-            computer = new Computer_composit(0, "Computer 1", 12345.99, ram, harddrive, cpu, display, os, soundcard, "~/images/computer.png");
-            computer2 = new Computer_composit(1, "Computer 2", 99945.99, ram, harddrive, cpu, display, os, soundcard, "~/images/computer.png");
-            computer3 = new Computer_composit(2, "Computer 3", 44445.99, ram2, harddrive2, cpu, display, os2, soundcard, "~/images/computer.png");
+            //computer = new Computer_composit(0, "Computer 1", 12345.99, ram, harddrive, cpu, display, os, soundcard, "~/images/computer.png");
+            //computer2 = new Computer_composit(1, "Computer 2", 99945.99, ram, harddrive, cpu, display, os, soundcard, "~/images/computer.png");
+            //computer3 = new Computer_composit(2, "Computer 3", 44445.99, ram2, harddrive2, cpu, display, os2, soundcard, "~/images/computer.png");
 
-            computer_list = new List<Computer_composit>();
-            computer_list.Add(computer);
-            computer_list.Add(computer2);
-            computer_list.Add(computer3);
-            PC_and_ram = new Tuple<List<Item>, Computer_composit>(list_ram,computer);
+            computer_list = securityService.GetComputers();
         }
 
         public ActionResult Index()
@@ -203,8 +165,7 @@ namespace part3.Controllers
             else // categ == 6
             {
                 return View("ItemsList", list_soundcard);
-            }
-           
+            }           
         }
 
         [HttpPost]
@@ -305,6 +266,7 @@ namespace part3.Controllers
         public ActionResult ShowCompositeProduct(string i)
         {
             int index = Int32.Parse(i);
+
             ViewBag.ram_available = new SelectList(list_ram, "id", "get_name_price");
             ViewBag.harddrive_available = new SelectList(list_harddrive, "id", "get_name_price");
             ViewBag.cpu_available = new SelectList(list_cpu, "id", "get_name_price");
@@ -312,6 +274,7 @@ namespace part3.Controllers
             ViewBag.os_available = new SelectList(list_os, "id", "get_name_price");
             ViewBag.soundcard_available = new SelectList(list_soundcard, "id", "get_name_price");
 
+            Computer_composit x = computer_list[0];
             return View("ViewCompositeProduct", computer_list[index]);
         }
 
@@ -324,11 +287,11 @@ namespace part3.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateCart(string IdSelectedRam, string IdSelectedHarddrive, 
+        public ActionResult UpdateComputerComponents(string IdSelectedRam, string IdSelectedHarddrive, 
             string IdSelectedCpu, string IdSelectedDisplay, string IdSelectedOs, string IdSelectedSoundcard, string idComputer, string nameComputer, string priceComputer)
         {
             //create computer
-            Computer_composit computer_user_selections = computer;
+            Computer_composit computer_user_selections = new Computer_composit();
             computer_user_selections.id = Int32.Parse(idComputer);
             computer_user_selections.name = nameComputer;
             computer_user_selections.price = Double.Parse(priceComputer);
@@ -365,7 +328,6 @@ namespace part3.Controllers
             id = Int32.Parse(IdSelectedSoundcard);
             Item item_selectedSoundcard = store_items.First(item => item.id == id);
             computer_user_selections.soundcard = item_selectedSoundcard;
-
 
             return PartialView("_CartPartialView", computer_user_selections) ;
         }

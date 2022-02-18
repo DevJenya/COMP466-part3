@@ -1,8 +1,10 @@
-﻿@model part3.Models.Item
+﻿@using part3.Models
 
-    <h4>@Model.name</h4>
+@model Item
 
-    <p>$ @Model.price </p>
+<h4>@Model.name</h4>
 
-    <img id="image_shown" src="@Url.Content(@Model.image_path)" class="item_block_image"/>
+<p>$ @Model.price </p>
+
+<img id="image_shown" src="@Url.Content(@Model.image_path)" class="item_block_image" />
 
