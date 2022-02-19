@@ -4,13 +4,11 @@
     ViewBag.Title = "CustomerOrders";
 }
 
-<h2>CustomerOrders</h2>
+<h2>Your Orders</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
+        <th></th>
         <th>
             @Html.DisplayNameFor(model => model.orderNumber)
         </th>
@@ -20,23 +18,65 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.orderNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.numberOfItems)
-        </td>
-        <td>
-            @foreach (var computer in item.computers_list)
-            {
-                <h4>@computer.ram.name  @computer.name</h4>
-                <img id="image_shown" src="@Url.Content(computer.image_path)" style="height: 100px; width: auto" />
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <input type="hidden" id="order_number" value="@item.orderNumber" />
+                <button class="deleteOrder">DELETE ORDER</button>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.orderNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numberOfItems)
+            </td>
+            <td>
+                @foreach (var computer in item.computers_list)
+                {
+                    <h3>@computer.name - $@computer.price</h3>
+                    <img id="image_shown" src="@Url.Content(computer.image_path)" style="height: 100px; width: auto" />
 
-            }
-        </td>
-    </tr>
-}
+                    <h4>Internal component</h4>
+
+
+                    <p>@computer.ram.name - $@computer.ram.price</p>
+
+                    <p>@computer.harddrive.name - $@computer.harddrive.price</p>
+
+                    <p>@computer.cpu.name - $@computer.cpu.price</p>
+
+                    <p>@computer.display.name - $@computer.display.price</p>
+
+                    <p>@computer.os.name - $@computer.os.price</p>
+
+                    <p>@computer.soundcard.name - $@computer.soundcard.price</p>
+                }
+            </td>
+        </tr>
+    }
 
 </table>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(".deleteOrder").click(function () {
+            console.log("Pressed order remove");
+            console.log($(this).siblings("#price").val());
+            var obj = this;
+            $.ajax({
+                url: "@Url.Action("RemoveOrder", "Home")",    // whom to call
+                type: "POST",
+                data: {
+                    orderNumber: $(this).siblings("#order_number").val(),
+                },
+                success: function (data) {
+                        var parent_container = obj.parentElement.parentElement;
+                        $(parent_container).fadeOut(1000);
+                }
+            });
+        });
+    </script>
+}

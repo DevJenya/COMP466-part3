@@ -12,7 +12,7 @@ namespace part3.Services
         internal List<Order> GetCustomerOrders(string userID)
         {
             Order order = new Order();
-            Computer_composit computer = new Computer_composit();
+            
             List<Order> orders = new List<Order>();
             SecurityService securityService = new SecurityService();
 
@@ -49,12 +49,13 @@ namespace part3.Services
                     //queryString = "SELECT itemID, category FROM dbo.orderItem WHERE orderNumber = '13' AND computerID = '0' ORDER BY category ASC";
                     cmd = new SqlCommand(queryString, connection);
                     reader = cmd.ExecuteReader();
-
+                    Computer_composit computer = new Computer_composit();
                     //build the PC
                     while (reader.Read())
                     {
                         int itemID = (int)reader.GetValue(0);
                         int category = (int)reader.GetValue(1);
+                        
 
                         switch (category)
                         {
@@ -79,10 +80,7 @@ namespace part3.Services
                                 break;
                         }
                     }
-                    //////////////////////////////////////
-                    //////////////////////////////////////
-                    ///
-                    //NEED TO BUILD COMPUTER VIA CONSTRUCTOR
+                    computer.calculatePrice();
                     orders[i].computers_list.Add(computer);
                     reader.Close();
                 }               
@@ -92,6 +90,31 @@ namespace part3.Services
             connection.Close();
 
             return orders;
+        }
+
+        internal void RemoveOrder(int orderNumber)
+        {
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=part4;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+            string queryString = "DELETE FROM dbo.orderItem WHERE orderNumber = '" + orderNumber + "'";
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlCommand cmd = new SqlCommand(queryString, connection);
+            adapter.DeleteCommand = cmd;
+            adapter.DeleteCommand.ExecuteNonQuery();
+
+            queryString = "DELETE FROM dbo.orderIndex WHERE orderNumber = '" + orderNumber + "'";
+            adapter = new SqlDataAdapter();
+            cmd = new SqlCommand(queryString, connection);
+            adapter.DeleteCommand = cmd;
+            adapter.DeleteCommand.ExecuteNonQuery();
+
+            cmd.Dispose();
+            connection.Close();
         }
     }
 }

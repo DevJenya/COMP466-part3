@@ -8,10 +8,16 @@ namespace part3.Services
 {
     public class OrderManagement
     {
+        OrderManagementDAO orderManagementDAO = new OrderManagementDAO();
         public List<Order> GetCustomerOrders(string userID)
         {
-            OrderManagementDAO orderManagementDAO = new OrderManagementDAO();
             return orderManagementDAO.GetCustomerOrders(userID);
+        }
+
+        //removes order from orderIndex and orderItem tables with that orderNumber
+        public void RemoveOrder(int orderNumber)
+        {
+            orderManagementDAO.RemoveOrder(orderNumber);
         }
     }
 }

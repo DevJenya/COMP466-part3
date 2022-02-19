@@ -359,6 +359,12 @@ namespace part3.Controllers
             return View("~/Views/OrderManagement/CustomerOrders.cshtml", order_list);
         }
 
+        public void RemoveOrder(string orderNumber)
+        {
+            OrderManagement orderManagement = new OrderManagement();
+            orderManagement.RemoveOrder(Int32.Parse(orderNumber));
+        }
+
         public void PurchaseItemsInCart()
         {
             //check if variable storing cart length exists 
