@@ -10,7 +10,8 @@ namespace part3.Services
     {
         SecurityDAO daoService = new SecurityDAO();
 
-        public bool Authenticate(UserModel user)
+        //return user ID 
+        public int Authenticate(UserModel user)
         {
             return daoService.FindByUser(user);
         }
@@ -51,6 +52,16 @@ namespace part3.Services
         public List<Computer_composit> GetComputers()
         {
             return daoService.QueryComputersAvailable();
+        }
+
+        public Item GetItemByID(int id)
+        {
+            return daoService.GetItemById(id);
+        }
+
+        public void SaveOrder(List<Computer_composit> computer_list, int userId)
+        {
+            daoService.SaveOrder(computer_list, userId);
         }
     }
 }

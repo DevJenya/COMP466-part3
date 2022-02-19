@@ -9,11 +9,12 @@ namespace part3.Services
 {
     public class SecurityDAO
     {
-        internal bool FindByUser(UserModel user)
+        //returns ID of the user found
+        internal int FindByUser(UserModel user)
         {
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=part4;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            int user_exists = -1; // -1 means user doesnt exit
+            int user_ID = -1; // -1 means user doesnt exit
 
             string queryString = "SELECT * FROM dbo.users WHERE username = '" + user.Username + "' AND password = '" + user.Password + "'";
 
@@ -28,14 +29,14 @@ namespace part3.Services
             if (reader != null && reader.HasRows)
             {
                 reader.Read();
-                user_exists = (int)reader.GetValue(0);
+                user_ID = (int)reader.GetValue(0);
             }
 
             reader.Close();
             cmd.Dispose();
             connection.Close();
 
-            return user_exists >= 0;
+            return user_ID;
         }
 
 
@@ -235,5 +236,93 @@ namespace part3.Services
             return list_of_computers;
         }
 
+        internal void SaveOrder(List<Computer_composit> computer_list, int userId)
+        {
+            //create order
+            //get order id
+            //add each item per pc to orderItem
+
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=part4;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+            string queryString = "Insert into dbo.orderIndex ( userId, numberOfItems) values ('" + userId + "', '" + computer_list.Count +"')";
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+
+            //Create order in the OrderIndex table, then get query for the last entry for this user to get the orderID
+            SqlCommand cmd = new SqlCommand(queryString, connection);
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            adapter.InsertCommand = cmd;
+            adapter.InsertCommand.ExecuteNonQuery();
+
+            //query DB to get order ID
+            queryString = "SELECT * FROM dbo.orderIndex WHERE userId = '" + userId + "' ORDER BY orderNumber DESC";
+            int orderNumber = -1;
+
+            cmd = new SqlCommand(queryString, connection);
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                orderNumber = (int)reader.GetValue(1); // returns OrderID
+            }
+            reader.Close();
+
+            int index = 0;
+            int list_length = computer_list.Count;
+
+            while(index < list_length)
+            {
+                Computer_composit computer = computer_list[index];
+                //Add Computer #Index Ram to the DB
+                queryString = "Insert into dbo.orderItem ( orderNumber, computerID, itemID, category, computerName) values ('" + orderNumber + "', '" + index + "', '" + computer.ram.id + "', '" + 1 + "', '" + computer.name + "')";
+                cmd = new SqlCommand(queryString, connection);
+                adapter = new SqlDataAdapter();
+                adapter.InsertCommand = cmd;
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                //Add Computer #Index Ram to the DB
+                queryString = "Insert into dbo.orderItem ( orderNumber, computerID, itemID, category, computerName) values ('" + orderNumber + "', '" + index + "', '"  + computer.harddrive.id + "', '" + 2 + "', '" + computer.name + "')";
+                cmd = new SqlCommand(queryString, connection);
+                adapter = new SqlDataAdapter();
+                adapter.InsertCommand = cmd;
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                //Add Computer #Index CPU to the DB
+                queryString = "Insert into dbo.orderItem ( orderNumber, computerID, itemID, category, computerName) values ('" + orderNumber + "', '" + index + "', '" + computer.cpu.id + "', '" + 3 + "', '" + computer.name + "')";
+                cmd = new SqlCommand(queryString, connection);
+                adapter = new SqlDataAdapter();
+                adapter.InsertCommand = cmd;
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                //Add Computer #Index Display to the DB
+                queryString = "Insert into dbo.orderItem ( orderNumber, computerID, itemID, category, computerName) values ('" + orderNumber + "', '" + index + "', '" + computer.display.id + "', '" + 4 + "', '" + computer.name + "')";
+                cmd = new SqlCommand(queryString, connection);
+                adapter = new SqlDataAdapter();
+                adapter.InsertCommand = cmd;
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                //Add Computer #Index Ram to the DB
+                queryString = "Insert into dbo.orderItem ( orderNumber, computerID, itemID, category, computerName) values ('" + orderNumber + "', '" + index + "', '" + computer.os.id + "', '" + 5 + "', '" + computer.name + "')";
+                cmd = new SqlCommand(queryString, connection);
+                adapter = new SqlDataAdapter();
+                adapter.InsertCommand = cmd;
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                //Add Computer #Index Ram to the DB
+                queryString = "Insert into dbo.orderItem ( orderNumber, computerID, itemID, category, computerName) values ('" + orderNumber + "', '" + index + "', '" + computer.soundcard.id + "', '" + 6 + "', '" + computer.name + "')";
+                cmd = new SqlCommand(queryString, connection);
+                adapter = new SqlDataAdapter();
+                adapter.InsertCommand = cmd;
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                // add other part implementation
+                index++;
+            }    
+ 
+            cmd.Dispose();
+            connection.Close();
+        }
     }
 }

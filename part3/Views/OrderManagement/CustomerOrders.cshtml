@@ -1,0 +1,42 @@
+﻿@model IEnumerable<part3.Models.Order>
+
+@{
+    ViewBag.Title = "CustomerOrders";
+}
+
+<h2>CustomerOrders</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.orderNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.numberOfItems)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.orderNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.numberOfItems)
+        </td>
+        <td>
+            @foreach (var computer in item.computers_list)
+            {
+                <h4>@computer.ram.name  @computer.name</h4>
+                <img id="image_shown" src="@Url.Content(computer.image_path)" style="height: 100px; width: auto" />
+
+            }
+        </td>
+    </tr>
+}
+
+</table>

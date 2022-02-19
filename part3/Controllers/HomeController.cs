@@ -21,7 +21,7 @@ namespace part3.Controllers
         List<Computer_composit> computer_list;
 
         public HomeController()
-        {           
+        {
             SecurityService securityService = new SecurityService();
 
             store_items = securityService.GetItems();
@@ -40,8 +40,8 @@ namespace part3.Controllers
         }
 
         public ActionResult Index()
-        {        
-           return View(computer_list);
+        {
+            return View(computer_list);
         }
 
 
@@ -63,19 +63,19 @@ namespace part3.Controllers
                 cookie = Request.Cookies["CART" + cart_length];
 
                 if (cookie != null)
-                {     
-                        if (cookie["idComputer"] == idComputer && cookie["priceComputer"] == priceComputer)
-                        {
-                            cookie.Expires = DateTime.Now.AddDays(-1);
-                            Response.Cookies.Add(cookie);
+                {
+                    if (cookie["idComputer"] == idComputer && cookie["priceComputer"] == priceComputer)
+                    {
+                        cookie.Expires = DateTime.Now.AddDays(-1);
+                        Response.Cookies.Add(cookie);
 
-                            cookie = Request.Cookies["CARTLENGTH"];
-                            cookie.Value = cart_length--.ToString();
-                            cookie.Expires = DateTime.Now.AddDays(1);
-                            cookie.Secure = false;
-                            Response.Cookies.Add(cookie);
-                            return 1;
-                       }                
+                        cookie = Request.Cookies["CARTLENGTH"];
+                        cookie.Value = cart_length--.ToString();
+                        cookie.Expires = DateTime.Now.AddDays(1);
+                        cookie.Secure = false;
+                        Response.Cookies.Add(cookie);
+                        return 1;
+                    }
                 }
                 cart_length--;
             }
@@ -91,7 +91,7 @@ namespace part3.Controllers
             // if doesnt exist, create. set to 1 because adding an item
             if (cookie != null)
             {
-                cart_length = Int32.Parse(cookie.Value)-1;
+                cart_length = Int32.Parse(cookie.Value) - 1;
             }
 
             while (cart_length >= 0)
@@ -116,7 +116,7 @@ namespace part3.Controllers
                             Response.Cookies.Add(cookie);
                             return 1;
                         }
-                    } 
+                    }
                     else
                     {
                         if (cookie["itemID"] == itemID)
@@ -134,8 +134,8 @@ namespace part3.Controllers
                     }
                 }
                 cart_length--;
-             }
-              return 0;
+            }
+            return 0;
         }
 
         public ActionResult ItemsList(string category)
@@ -165,7 +165,7 @@ namespace part3.Controllers
             else // categ == 6
             {
                 return View("ItemsList", list_soundcard);
-            }           
+            }
         }
 
         [HttpPost]
@@ -175,12 +175,12 @@ namespace part3.Controllers
             HttpCookie cookie = Request.Cookies["CARTLENGTH"];
 
             // if doesnt exist, create. set to 1 because adding an item
-            if(cookie == null){
-                cookie = new HttpCookie("CARTLENGTH", "1");      
+            if (cookie == null) {
+                cookie = new HttpCookie("CARTLENGTH", "1");
                 cookie.Expires = DateTime.Now.AddDays(1);
                 cookie.Secure = false;
                 Response.Cookies.Add(cookie);
-            } 
+            }
             else //exists, increment by 1
             {
                 cookie.Value = (Int32.Parse(cookie.Value) + 1).ToString();
@@ -199,7 +199,7 @@ namespace part3.Controllers
                 cookie = Request.Cookies["CART" + counter];
             }
 
-            cookie = new HttpCookie("CART"+counter);
+            cookie = new HttpCookie("CART" + counter);
             cookie["type"] = "0"; // 0 - means item, 1 - composite computer
             cookie["itemID"] = itemID;
             cookie.Expires = DateTime.Now.AddDays(1);
@@ -287,7 +287,7 @@ namespace part3.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateComputerComponents(string IdSelectedRam, string IdSelectedHarddrive, 
+        public ActionResult UpdateComputerComponents(string IdSelectedRam, string IdSelectedHarddrive,
             string IdSelectedCpu, string IdSelectedDisplay, string IdSelectedOs, string IdSelectedSoundcard, string idComputer, string nameComputer, string priceComputer)
         {
             //create computer
@@ -301,7 +301,7 @@ namespace part3.Controllers
             int id; //TempData variable used to lookup parts
             //ram selected in the user view
             id = Int32.Parse(IdSelectedRam);
-            Item item_selectedRam = store_items.First(item => item.id == id); 
+            Item item_selectedRam = store_items.First(item => item.id == id);
             computer_user_selections.ram = item_selectedRam;
 
             //hardrive selected in the user view
@@ -329,92 +329,12 @@ namespace part3.Controllers
             Item item_selectedSoundcard = store_items.First(item => item.id == id);
             computer_user_selections.soundcard = item_selectedSoundcard;
 
-            return PartialView("_CartPartialView", computer_user_selections) ;
+            return PartialView("_CartPartialView", computer_user_selections);
         }
-        
+
         public ActionResult Cart()
         {
-            //check if variable storing cart length exists 
-            HttpCookie cookie = Request.Cookies["CARTLENGTH"];
-            int cart_length = 0;
-
-            // if doesnt exist, create. set to 1 because adding an item
-            if (cookie != null)
-            {
-                cart_length = Int32.Parse(cookie.Value)-1;
-            }        
-
-            int id;
-            List<Item> items_list = new List<Item>();
-            List<Computer_composit> computer_list = new List<Computer_composit>();
-            Item item = new Item(); //temp store items from cookies
-            Computer_composit computer_item; //temp store items from cookies
-            Tuple<List<Computer_composit>, List<Item>> computer_and_items_tuple;
-
-            while (cart_length >= 0)
-            {
-                //Get cookie
-                cookie = Request.Cookies["CART" + cart_length];
-
-                //If cookie has an item in it, add it to list; reoeat until none left
-                // look in cookie "CART0", "CART1"..."CARTn"
-                if (cookie != null)
-                {
-                    //cookie stores item information
-                    if (cookie["type"] == "0")
-                    {
-                        id = Int32.Parse(cookie["itemID"]);
-                        //create item to add to cart, look it up from the store list of items
-                        item = store_items.First(Item_selected => Item_selected.id == id);
-                        items_list.Add(item);
-                    } 
-                    else if(cookie["type"] == "1")
-                    {
-                        computer_item = new Computer_composit();
-                        computer_item.id = Int32.Parse(cookie["idComputer"]);
-                        computer_item.price = Double.Parse(cookie["priceComputer"]);
-                        computer_item.name = cookie["nameComputer"];
-
-                        id = Int32.Parse(cookie["idRam"]);
-                        //create item to add to cart, look it up from the store list of items
-                        item = store_items.First(Item_selected => Item_selected.id == id);
-                        computer_item.ram = item;
-
-                        id = Int32.Parse(cookie["idHarddrive"]);
-                        //create item to add to cart, look it up from the store list of items
-                        item = store_items.First(Item_selected => Item_selected.id == id);
-                        computer_item.harddrive = item;
-
-                        id = Int32.Parse(cookie["idCpu"]);
-                        //create item to add to cart, look it up from the store list of items
-                        item = store_items.First(Item_selected => Item_selected.id == id);
-                        computer_item.cpu = item;
-
-                        id = Int32.Parse(cookie["idDisplay"]);
-                        //create item to add to cart, look it up from the store list of items
-                        item = store_items.First(Item_selected => Item_selected.id == id);
-                        computer_item.display = item;
-
-                        id = Int32.Parse(cookie["idOs"]);
-                        //create item to add to cart, look it up from the store list of items
-                        item = store_items.First(Item_selected => Item_selected.id == id);
-                        computer_item.os = item;
-
-                        id = Int32.Parse(cookie["idSoundcard"]);
-                        //create item to add to cart, look it up from the store list of items
-                        item = store_items.First(Item_selected => Item_selected.id == id);
-                        computer_item.soundcard = item;
-
-                        computer_list.Add(computer_item);
-                    }
-                }
-                cart_length--;
-                cookie = Request.Cookies["CART" + cart_length];
-            }
-
-            computer_and_items_tuple = new Tuple<List<Computer_composit>, List<Item>>(computer_list, items_list);
-
-            return View("Cart", computer_and_items_tuple);
+            return View("Cart", GetCartItems());
         }
 
         public ActionResult About()
@@ -430,5 +350,103 @@ namespace part3.Controllers
 
             return View();
         }
-    }
+
+        public ActionResult CustomerOrders()
+        {
+            OrderManagement orderManagement = new OrderManagement();
+            
+            List<Order> order_list = orderManagement.GetCustomerOrders("4");
+            return View("~/Views/OrderManagement/CustomerOrders.cshtml", order_list);
+        }
+
+        public void PurchaseItemsInCart()
+        {
+            //check if variable storing cart length exists 
+            HttpCookie cookie = Request.Cookies["authorized"];
+            int userID = 0;
+
+            // if doesnt exist, create. set to 1 because adding an item
+            if (cookie != null)
+            {
+                userID = Int32.Parse(cookie["userID"]);
+            
+            SecurityService securityService = new SecurityService();
+            List<Computer_composit> list = GetCartItems(); //items in the cart
+       
+            securityService.SaveOrder(list, userID);
+            }
+        }
+
+        internal List<Computer_composit> GetCartItems()
+        {
+            //check if variable storing cart length exists 
+            HttpCookie cookie = Request.Cookies["CARTLENGTH"];
+            int cart_length = 0;
+
+            // if exist, create. set to 1 because adding an item
+            if (cookie != null)
+            {
+                cart_length = Int32.Parse(cookie.Value) - 1;
+            }
+
+            int id;
+            List<Computer_composit> computer_list = new List<Computer_composit>();
+            Item item = new Item(); //temp store items from cookies
+            Computer_composit computer_item; //temp store items from cookies
+
+            while (cart_length >= 0)
+            {
+                //Get cookie
+                cookie = Request.Cookies["CART" + cart_length];
+
+                //If cookie has an item in it, add it to list; reoeat until none left
+                // look in cookie "CART0", "CART1"..."CARTn"
+                if (cookie != null)
+                {
+                    computer_item = new Computer_composit();
+                    computer_item.id = Int32.Parse(cookie["idComputer"]);
+                    computer_item.price = Double.Parse(cookie["priceComputer"]);
+                    computer_item.name = cookie["nameComputer"];
+
+                    id = Int32.Parse(cookie["idRam"]);
+                    //create item to add to cart, look it up from the store list of items
+                    item = store_items.First(Item_selected => Item_selected.id == id);
+                    computer_item.ram = item;
+
+                    id = Int32.Parse(cookie["idHarddrive"]);
+                    //create item to add to cart, look it up from the store list of items
+                    item = store_items.First(Item_selected => Item_selected.id == id);
+                    computer_item.harddrive = item;
+
+                    id = Int32.Parse(cookie["idCpu"]);
+                    //create item to add to cart, look it up from the store list of items
+                    item = store_items.First(Item_selected => Item_selected.id == id);
+                    computer_item.cpu = item;
+
+                    id = Int32.Parse(cookie["idDisplay"]);
+                    //create item to add to cart, look it up from the store list of items
+                    item = store_items.First(Item_selected => Item_selected.id == id);
+                    computer_item.display = item;
+
+                    id = Int32.Parse(cookie["idOs"]);
+                    //create item to add to cart, look it up from the store list of items
+                    item = store_items.First(Item_selected => Item_selected.id == id);
+                    computer_item.os = item;
+
+                    id = Int32.Parse(cookie["idSoundcard"]);
+                    //create item to add to cart, look it up from the store list of items
+                    item = store_items.First(Item_selected => Item_selected.id == id);
+                    computer_item.soundcard = item;
+
+                    computer_list.Add(computer_item);
+                }
+                cart_length--;
+                cookie = Request.Cookies["CART" + cart_length];
+            }
+            return computer_list;
+        }
+                
 }
+
+}
+    

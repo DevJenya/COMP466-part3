@@ -51,19 +51,17 @@ namespace part3.Controllers
             userModel.Password = password;
 
             SecurityService securityService = new SecurityService();
-            Boolean success = securityService.Authenticate(userModel);
+            int userID = 0;
+            userID = securityService.Authenticate(userModel);
 
-            if (success)
-            {
-                HttpCookie cookie = new HttpCookie("authorized", userModel.Username);
+                HttpCookie cookie = new HttpCookie("authorized");
+                cookie["name"] = username;
+                cookie["userID"] = userID.ToString();               
+
+                //("authorized", userModel.Username);
                 cookie.Expires = DateTime.Now.AddDays(1);
                 Response.Cookies.Add(cookie);
-                return RedirectToAction("Index", "Home");
-            } 
-            else
-            {
-                return RedirectToAction("Cart", "Home");
-            }                 
+                return RedirectToAction("Index", "Home");                
         }
 
         [HttpPost]

@@ -6,7 +6,8 @@
     string user_authorized = "";
     if (Request.Cookies["authorized"] != null)
     {
-        user_authorized = Request.Cookies["authorized"].Value;
+        HttpCookie cookie = Request.Cookies["authorized"];
+        user_authorized = cookie["name"];
     } 
 }
 

@@ -1,19 +1,19 @@
 ﻿@using part3.Models
-@model Tuple<List<Computer_composit>, List<Item>>
+@model List<Computer_composit>
 
 @{
-    ViewBag.Title = "Cart";
+
 }
 
 <h2>Cart</h2>
-<form action="/" method="post">
+<form action="/Home/PurchaseItemsInCart" method="post">
     <button>ORDER AND PAY</button>
 </form>
 
 <br />
 
 <table class="table">
-    @foreach (var item in Model.Item1)
+    @foreach (var item in Model)
     {
         <tr>
             <td>

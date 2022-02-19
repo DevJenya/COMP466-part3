@@ -39,5 +39,10 @@ namespace part3.Models
             this.image_path = "~/images/computer.png";
             this.price = 0;
         }
+
+        public void calculatePrice()
+        {
+            price = ram.price + harddrive.price + cpu.price + display.price + os.price + soundcard.price;
+        }
     }
 }
